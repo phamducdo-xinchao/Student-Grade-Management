@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Điểm Học Tập Của Sinh Viên PTIT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet" />
+    <link rel="icon" href="./img/Logo_PTIT_University.png" type="image/x-icon" />
+    <link rel="stylesheet" href="./decor_in4/style.css" />
+    <link rel="stylesheet" href="./auth/auth.css" />
+  </head>
+  <body>
+    <!-- TOPBAR -->
+    <header id="topbar">
+      <div class="logo">PTIT<span>DB</span></div>
+      <div class="subtitle">Hệ thống quản lý đào tạo</div>
+      <div class="stats-bar">
+        <div class="stat">
+          <div class="val" id="stat-sv">0</div>
+          <div class="lbl">Sinh viên</div>
+        </div>
+        <div class="stat">
+          <div class="val" id="stat-gv">0</div>
+          <div class="lbl">Giảng viên</div>
+        </div>
+        <div class="stat">
+          <div class="val" id="stat-mh">0</div>
+          <div class="lbl">Môn học</div>
+        </div>
+        <div class="stat">
+          <div class="val" id="stat-f">0</div>
+          <div class="lbl">Điểm F</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- LAYOUT -->
+    <div id="layout">
+      <aside id="sidebar">
+        <div class="nav-section-title">Danh mục</div>
+        <div class="nav-item active" data-table="khoa" onclick="switchTable('khoa')">🏛️ Khoa <span class="count" id="cnt-khoa">0</span></div>
+        <div class="nav-item" data-table="lop" onclick="switchTable('lop')">🎒 Lớp <span class="count" id="cnt-lop">0</span></div>
+        <div class="nav-item" data-table="sinh_vien" onclick="switchTable('sinh_vien')">👨‍🎓 Sinh viên <span class="count" id="cnt-sinh_vien">0</span></div>
+        <div class="nav-item" data-table="giang_vien" onclick="switchTable('giang_vien')">👩‍🏫 Giảng viên <span class="count" id="cnt-giang_vien">0</span></div>
+        <div class="nav-item" data-table="mon_hoc" onclick="switchTable('mon_hoc')">📚 Môn học <span class="count" id="cnt-mon_hoc">0</span></div>
+        <div class="nav-item" data-table="hoc_ky" onclick="switchTable('hoc_ky')">📅 Học kỳ <span class="count" id="cnt-hoc_ky">0</span></div>
+        <div class="nav-item" data-table="lop_hoc_phan" onclick="switchTable('lop_hoc_phan')">🗂️ Lớp học phần <span class="count" id="cnt-lop_hoc_phan">0</span></div>
+        <div class="nav-item" data-table="diem" onclick="switchTable('diem')">📊 Điểm <span class="count" id="cnt-diem">0</span></div>
+      </aside>
+
+      <main id="main">
+        <div id="page-header">
+          <div class="ph-icon" id="ph-icon">🏛️</div>
+          <div>
+            <div class="ph-title" id="ph-title">Bảng Khoa</div>
+            <div class="ph-sub" id="ph-sub">...</div>
+          </div>
+          <input type="text" id="search-input" placeholder="Tìm kiếm..." onkeyup="applyFilter()" />
+          <button id="btn-add" onclick="openAdd()">+ Thêm mới</button>
+        </div>
+
+        <div id="table-area">
+          <div class="tbl-wrap">
+            <table>
+              <thead id="thead"></thead>
+              <tbody id="tbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div id="pagination"></div>
+      </main>
+    </div>
+
+    <!-- MODAL FORM -->
+    <div class="overlay" id="form-modal">
+      <div class="modal-box">
+        <div class="modal-header">
+          <div>
+            <div class="mh-title" id="modal-title">Thêm bản ghi</div>
+            <div class="mh-sub" id="modal-sub">...</div>
+          </div>
+          <button class="modal-close" onclick="closeModal('form-modal')">×</button>
+        </div>
+        <div class="modal-body" id="modal-body"></div>
+        <div class="modal-footer">
+          <button class="btn-cancel" onclick="closeModal('form-modal')">Hủy</button>
+          <button class="btn-save" id="btn-save" onclick="saveRecord()">Lưu</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL DELETE -->
+    <div class="overlay" id="del-modal">
+      <div class="modal-box">
+        <div class="modal-header">
+          <div class="mh-title">Xác nhận xóa</div>
+          <button class="modal-close" onclick="closeModal('del-modal')">×</button>
+        </div>
+        <div class="modal-body">
+          <div>Bạn có chắc chắn muốn xóa bản ghi từ bảng <strong id="del-table-name"></strong> này?</div>
+          <div class="del-preview" id="del-preview"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-cancel" onclick="closeModal('del-modal')">Hủy</button>
+          <button class="btn-del-confirm" onclick="confirmDelete()">Xóa vĩnh viễn</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast"></div>
+
+    <script src="./decor_in4/main.js"></script>
+    <script>
+      function switchTable(tableName) {
+        activeTable = tableName;
+        render();
+      }
+    </script>
+    <script src="./auth/auth.js"></script>
+  </body>
+</html>

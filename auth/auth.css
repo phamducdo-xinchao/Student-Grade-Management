@@ -1,0 +1,276 @@
+/* Ẩn toàn bộ app cho đến khi đăng nhập */
+#layout, #topbar { display: none !important; }
+body.auth-ready #layout,
+body.auth-ready #topbar { display: flex !important; }
+
+/* ── AUTH SCREEN ── */
+#auth-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* decorative circles */
+#auth-screen::before,
+#auth-screen::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    opacity: .08;
+    background: var(--sky);
+    pointer-events: none;
+}
+#auth-screen::before { width: 600px; height: 600px; top: -180px; left: -160px; }
+#auth-screen::after  { width: 400px; height: 400px; bottom: -120px; right: -80px; }
+
+/* card */
+.auth-card {
+    background: #fff;
+    border-radius: 18px;
+    width: 420px;
+    max-width: calc(100vw - 32px);
+    box-shadow: 0 32px 80px rgba(10,25,60,.35);
+    overflow: hidden;
+    animation: authSlideIn .38s cubic-bezier(.22,1,.36,1) both;
+}
+
+@keyframes authSlideIn {
+    from { transform: translateY(28px) scale(.96); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+}
+
+/* card header */
+.auth-head {
+    background: var(--navy);
+    padding: 28px 32px 22px;
+    text-align: center;
+    position: relative;
+}
+.auth-logo {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -.5px;
+}
+.auth-logo span { color: var(--sky); }
+.auth-tagline {
+    font-size: 11px;
+    color: rgba(255,255,255,.5);
+    margin-top: 3px;
+    letter-spacing: .04em;
+}
+
+/* tab switcher */
+.auth-tabs {
+    display: flex;
+    background: rgba(255,255,255,.07);
+    border-radius: 8px;
+    margin: 16px 0 0;
+    padding: 3px;
+    gap: 2px;
+}
+.auth-tab {
+    flex: 1;
+    padding: 7px 0;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: rgba(255,255,255,.55);
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .18s;
+}
+.auth-tab.active {
+    background: #fff;
+    color: var(--navy);
+    box-shadow: 0 2px 8px rgba(10,25,60,.18);
+}
+
+/* card body */
+.auth-body {
+    padding: 26px 32px 30px;
+}
+
+/* panels */
+.auth-panel { display: none; }
+.auth-panel.active { display: block; animation: fadeIn .22s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* fields */
+.auth-field {
+    margin-bottom: 14px;
+}
+.auth-field label {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+.auth-field input,
+.auth-field select {
+    width: 100%;
+    padding: 10px 13px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    transition: border .15s, background .15s;
+}
+.auth-field input:focus,
+.auth-field select:focus {
+    border-color: var(--sky);
+    background: #fff;
+}
+.auth-field input.error { border-color: var(--red); }
+
+/* role selector pills */
+.role-pills {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+}
+.role-pill {
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 6px;
+    cursor: pointer;
+    text-align: center;
+    transition: all .15s;
+    background: var(--bg);
+}
+.role-pill:hover { border-color: var(--sky); background: #eaf3fe; }
+.role-pill.selected { border-color: var(--blue); background: #daeafa; }
+.role-pill .rp-icon { font-size: 18px; }
+.role-pill .rp-label {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--muted);
+    margin-top: 3px;
+}
+.role-pill.selected .rp-label { color: var(--blue); }
+
+/* error msg */
+.auth-error {
+    background: #fcd4d4;
+    color: #8f0a0a;
+    border-radius: 7px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    display: none;
+}
+.auth-error.show { display: block; animation: fadeIn .18s ease; }
+
+/* submit button */
+.auth-btn {
+    width: 100%;
+    padding: 11px;
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: background .14s, transform .1s;
+}
+.auth-btn:hover { background: var(--navy); }
+.auth-btn:active { transform: scale(.98); }
+
+/* ── TOPBAR USER CHIP ── */
+#user-chip {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+#user-chip .uc-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--sky);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    flex-shrink: 0;
+}
+#user-chip .uc-info { line-height: 1.3; }
+#user-chip .uc-name {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #fff;
+}
+#user-chip .uc-role {
+    font-size: 10px;
+    color: rgba(255,255,255,.5);
+}
+#user-chip .uc-role .role-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 99px;
+    font-size: 9.5px;
+    font-weight: 700;
+    margin-right: 3px;
+}
+.rb-admin  { background: #fce4b8; color: #7a3c00; }
+.rb-teacher{ background: #d4f4e8; color: #0a6e4a; }
+.rb-student{ background: #daeafa; color: #0f4e90; }
+
+#btn-logout {
+    padding: 5px 13px;
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 6px;
+    color: rgba(255,255,255,.75);
+    font-size: 11.5px;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .14s;
+    white-space: nowrap;
+}
+#btn-logout:hover { background: rgba(255,255,255,.18); color: #fff; }
+
+/* ── PERMISSION LOCK ── */
+/* Khi sinh viên xem, nút Sửa/Xóa/Thêm bị ẩn hoặc disabled */
+body.role-student #btn-add { display: none !important; }
+body.role-student .btn-edit,
+body.role-student .btn-del { display: none !important; }
+
+/* Giảng viên chỉ sửa được bảng điểm, ẩn nút ở các bảng khác */
+body.role-teacher .no-teacher-edit #btn-add { display: none !important; }
+body.role-teacher .no-teacher-edit .btn-edit,
+body.role-teacher .no-teacher-edit .btn-del { display: none !important; }
+
+/* badge quyền trên sidebar */
+.role-hint {
+    margin: 10px 12px 6px;
+    padding: 6px 10px;
+    border-radius: 7px;
+    font-size: 10.5px;
+    font-weight: 600;
+    display: none;
+}
+body.role-student  .role-hint { display: block; background: #daeafa; color: #0f4e90; }
+body.role-teacher  .role-hint { display: block; background: #d4f4e8; color: #0a6e4a; }

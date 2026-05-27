@@ -235,10 +235,6 @@ function bootApp(user) {
     // 6) Đánh dấu các bảng không cho giảng viên edit
     applyTeacherRestriction();
 
-    // 7) Nếu sinh viên thì tự nhảy sang tab Điểm và lọc điểm của chính mình
-    if (user.role === "student") {
-        applyStudentDiemFilter(user);
-    }
 }
 
 // ── Thêm user chip vào topbar ─────────────────────────────────
@@ -304,35 +300,6 @@ function applyTeacherRestriction() {
     if (document.body.classList.contains("role-teacher")) {
         main.classList.add("no-teacher-edit"); // mặc định đang ở khoa
     }
-}
-
-// ── Sinh viên: lọc điểm theo mã SV ─────
-function applyStudentDiemFilter(user) {
-    // Tìm sinh viên có tên khớp với tên user đăng nhập
-    // Nếu không khớp, hiện tất cả điểm (chế độ demo)
-    const svMatch = (typeof DB !== "undefined") &&
-        DB.sinh_vien.find(sv =>
-            sv.ho_ten.toLowerCase().includes(user.name.toLowerCase()) ||
-            user.name.toLowerCase().includes(sv.ho_ten.toLowerCase())
-        );
-
-    if (svMatch) {
-        // Lưu filter vào state toàn cục để render() của main.js có thể dùng
-        window._studentMaSV = svMatch.ma_sinh_vien;
-    }
-
-    // Khi SV click sang bảng Điểm, tự động filter
-    const origSwitch = window.switchTable;
-    window.switchTable = function (tableName) {
-        origSwitch(tableName);
-        if (document.body.classList.contains("role-student") && tableName === "diem" && window._studentMaSV) {
-            const searchInput = document.getElementById("search-input");
-            if (searchInput) {
-                searchInput.value = window._studentMaSV;
-                if (typeof applyFilter === "function") applyFilter();
-            }
-        }
-    };
 }
 
 // ── Đăng xuất ─────────────────────────────────────────────────

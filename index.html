@@ -8,12 +8,13 @@
     <link rel="icon" href="./img/Logo_PTIT_University.png" type="image/x-icon" />
     <link rel="stylesheet" href="./decor_in4/style.css" />
     <link rel="stylesheet" href="./auth/auth.css" />
+    <link rel="stylesheet" href="./dashboard/dashboard.css" />
   </head>
   <body>
     <!-- TOPBAR -->
     <header id="topbar">
-      <div class="logo">PTIT<span>DB</span></div>
-      <div class="subtitle">Hệ thống quản lý đào tạo</div>
+      <div class="logo">Quản Lý Điểm</div>
+      <div class="subtitle">Hệ Thống Quản Lý Đào Tạo</div>
       <div class="stats-bar">
         <div class="stat">
           <div class="val" id="stat-sv">0</div>
@@ -37,11 +38,16 @@
     <!-- LAYOUT -->
     <div id="layout">
       <aside id="sidebar">
+        <div class="nav-item" id="nav-dashboard" onclick="showDashboard()">📈 Tổng quan</div>
         <div class="nav-section-title">Danh mục</div>
         <div class="nav-item active" data-table="khoa" onclick="switchTable('khoa')">🏛️ Khoa <span class="count" id="cnt-khoa">0</span></div>
         <div class="nav-item" data-table="lop" onclick="switchTable('lop')">🎒 Lớp <span class="count" id="cnt-lop">0</span></div>
+
+        <div class="nav-section-title">Nhân sự</div>
         <div class="nav-item" data-table="sinh_vien" onclick="switchTable('sinh_vien')">👨‍🎓 Sinh viên <span class="count" id="cnt-sinh_vien">0</span></div>
         <div class="nav-item" data-table="giang_vien" onclick="switchTable('giang_vien')">👩‍🏫 Giảng viên <span class="count" id="cnt-giang_vien">0</span></div>
+
+        <div class="nav-section-title">Học tập</div>
         <div class="nav-item" data-table="mon_hoc" onclick="switchTable('mon_hoc')">📚 Môn học <span class="count" id="cnt-mon_hoc">0</span></div>
         <div class="nav-item" data-table="hoc_ky" onclick="switchTable('hoc_ky')">📅 Học kỳ <span class="count" id="cnt-hoc_ky">0</span></div>
         <div class="nav-item" data-table="lop_hoc_phan" onclick="switchTable('lop_hoc_phan')">🗂️ Lớp học phần <span class="count" id="cnt-lop_hoc_phan">0</span></div>
@@ -109,13 +115,45 @@
 
     <div id="toast"></div>
 
+    <!-- 1. Dữ liệu & logic bảng gốc -->
     <script src="./decor_in4/main.js"></script>
+
+    <!-- 2. Dashboard (cần DB từ main.js) -->
+    <script src="./dashboard/dashboard.js"></script>
+
+    <!-- 3. Auth -->
+    <script src="./auth/auth.js"></script>
+
+    <!-- 4. Điều hướng – switchTable duy nhất, không có hàm trùng lặp -->
     <script>
+      let isDashboardMode = false;
+
       function switchTable(tableName) {
+        if (isDashboardMode) {
+          // Xóa dashboard overlay, không làm gì thêm
+          const dv = document.getElementById("dashboard-view");
+          if (dv) dv.remove();
+          isDashboardMode = false;
+        }
+
         activeTable = tableName;
+
+        document.querySelectorAll(".nav-item[data-table]").forEach((x) => x.classList.remove("active"));
+        const navEl = document.querySelector('.nav-item[data-table="' + tableName + '"]');
+        if (navEl) navEl.classList.add("active");
+        document.getElementById("nav-dashboard").classList.remove("active");
+
         render();
       }
+
+      function showDashboard() {
+        isDashboardMode = true;
+
+        document.querySelectorAll(".nav-item[data-table]").forEach((x) => x.classList.remove("active"));
+        document.getElementById("nav-dashboard").classList.add("active");
+
+        renderDashboard();
+      }
     </script>
-    <script src="./auth/auth.js"></script>
   </body>
 </html>

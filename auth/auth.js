@@ -48,7 +48,7 @@ function renderAuthScreen() {
     div.innerHTML = `
     <div class="auth-card">
       <div class="auth-head">
-        <div class="auth-logo">PTIT<span>DB</span></div>
+        <div class="auth-logo">Quản Lý Điểm</div>
         <div class="auth-tagline">Hệ thống quản lý đào tạo</div>
         <div class="auth-tabs">
           <button class="auth-tab active" id="tab-login"  onclick="authShowTab('login')">Đăng nhập</button>
